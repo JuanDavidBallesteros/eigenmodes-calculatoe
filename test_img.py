@@ -1,15 +1,14 @@
 from PIL import Image
 import tkinter as tk
 
-def run():
+def run(root):
     # Creamos la ventana de tkinter
-    root = tk.Tk()
 
     # Abrimos la imagen y la cargamos en un objeto Image
-    image = Image.open("eigenmodes.png")
+    image1 = Image.open("eigenmodes.png")
 
     # Verificamos que la imagen se cargó correctamente
-    if image.format == "png":
+    if image1.format == "png":
         print("La imagen se cargó correctamente.")
     else:
         print("Error al cargar la imagen.")

@@ -163,14 +163,39 @@ class Application(tk.Frame):
         tree.heading("N", text="N")      
 
         # Añadir elementos a la lista
-        i = 1
+        i = 0
         for item in lista:
+            i = i+1
             tree.insert("", 0, text=i, values=item)
         
         tree.pack()
 
-        # Crear una nueva ventana      
-        run()
+        # Crear una nueva ventana
+        new_window3 = tk.Toplevel(root)
+        new_window3.title("Gráfica")
+        
+        image = Image.open("eigenmodes.png")
+
+        # Verificamos que la imagen se cargó correctamente
+        if image.format == "png":
+            print("La imagen se cargó correctamente.")
+        else:
+            print("Error al cargar la imagen.")
+
+        # Creamos un objeto PhotoImage de tkinter a partir de la imagen abierta
+        photo = tk.PhotoImage(file="eigenmodes.png")
+
+        # Verificamos que el objeto PhotoImage se creó correctamente
+        if photo:
+            print("El objeto PhotoImage se creó correctamente.")
+        else:
+            print("Error al crear el objeto PhotoImage.")
+
+        # Mostramos la imagen en un widget Label
+        label = tk.Label(new_window3, image=photo)
+        label.pack()
+        
+        run(root)
                     
 
 root = tk.Tk()
