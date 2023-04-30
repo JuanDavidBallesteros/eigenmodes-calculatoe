@@ -1,7 +1,9 @@
 from PIL import Image
 import tkinter as tk
+import os, sys
 
 def run(root):
+    app_path = os.path.dirname(sys.executable)
     # Creamos la ventana de tkinter
 
     # Abrimos la imagen y la cargamos en un objeto Image

@@ -1,17 +1,24 @@
 import tkinter as tk
-from tkinter import Canvas, PhotoImage, ttk
+from tkinter import ttk
 from funciones import *
-from PIL import ImageTk, Image
-from test_img import *
+from PIL import Image
+from img import *
 
+'''
+Se crea la aplicacción de escritorio usando tkinter
+'''
 class Application(tk.Frame):
+    
+    '''
+    Crea la función que crea la pantalla principal
+    '''
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
         self.master.title("Calculadora de Modos")
         
         
-        # Crear un estilo personalizado
+        # Crear un estilo personalizado para los botones y campos del formulario
         style = ttk.Style()
         style.configure("TButton",background='#cba',borderwidth=0, font=("Arial", 12), relief='flat')
         style.configure("TEntry",borderwidth=0, font=("Arial", 12))
@@ -50,13 +57,15 @@ class Application(tk.Frame):
                                 fg="white", padx=20, pady=10, borderwidth=0, 
                                 relief=tk.FLAT, command=self.submit)
 
-        # Posicionar los widgets del formulario en el frame contenedor
+        # Posicionar los widgets del formulario en el frame contenedor anteriormente definidos
+        # Sección constantes
         k_title_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
         self.sound_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
         self.sound_entry.grid(row=1, column=1, padx=5, pady=5, sticky="e")
         self.schoedler_label.grid(row=2, column=0, padx=5, pady=5, sticky="w")
         self.schoedler_entry.grid(row=2, column=1, padx=5, pady=5, sticky="e")
 
+        # Sección cuarto
         room_title_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
         self.largo_label.grid(row=4, column=0, padx=5, pady=5, sticky="w")
         self.largo_entry.grid(row=4, column=1, padx=5, pady=5, sticky="e")
@@ -65,6 +74,7 @@ class Application(tk.Frame):
         self.alto_label.grid(row=6, column=0, padx=5, pady=5, sticky="w")
         self.alto_entry.grid(row=6, column=1, padx=5, pady=5, sticky="e")
         
+        # Sección RTmid y Freq Critica
         opciones_label.grid(row=7, column=0, padx=5, pady=5, sticky="w")
         self.checkbox.grid(row=8, column=0, padx=5, pady=5, sticky="w")
         self.rt_mid_label.grid(row=9, column=0, padx=5, pady=5, sticky="w")
@@ -72,23 +82,28 @@ class Application(tk.Frame):
         self.freq_critica_label.grid(row=10, column=0, padx=5, pady=5, sticky="w")
         self.freq_critica_entry.grid(row=10, column=1, padx=5, pady=5, sticky="e")
         
+        # Crear un botón para enviar el formulario
         send_button.grid(row=11, column=1, padx=5, pady=10, sticky="e")
 
+    '''
+    Funciónes que se llaman al presionar el botón de enviar
+    '''
     def submit(self):
-
-        # Obtener el valor del campo de formulario
+        # Revisar la función en funciones.py  --> da las dimensiones generales del cuarto
         dimensiones = dimensionesGenerales(int(self.largo_entry.get()), 
                              int(self.ancho_entry.get()),  
                              int(self.alto_entry.get()))
         
         print( self.Con_RTmid.get())
         
+        # Revisar la función en funciones.py --> calcula el rtmid o la frecuencia crítica
         rtmid_and_critica = rtmid_critica(int(self.rt_mid_entry.get()), 
                                           int(self.freq_critica_entry.get()), 
                                           self.Con_RTmid.get(), 
                                           int(self.schoedler_entry.get()), 
                                           dimensiones["volumen"] )
         
+        # Revisar la función en funciones.py --> Calcula el numero de modos totales y pot tipo
         modes = get_modos(self.sound_entry.get(),
                      int(self.largo_entry.get()), 
                      int(self.ancho_entry.get()), 
@@ -96,15 +111,17 @@ class Application(tk.Frame):
                      rtmid_and_critica["freq_critica"])
         
         lista = []
+        # Revisar la función en funciones.py  --> genera la lista de frecuencias con los valores de K, N, M, 
         eigenmodes(int(self.largo_entry.get()),
                             int(self.ancho_entry.get()),
                             int(self.alto_entry.get()),
                             lista, int(100), int(self.sound_entry.get()))
         
+        # Revisar la función en funciones.py  --> Genera la grafica de barras
         grafica = drawEigenmodes(lista, int(100))
         
     ## -------------------------------------- Caracterisitcas fisicas y modos ------------------------------
-        # Crear una nueva ventana
+        # Crear una nueva ventana para mostrar las caracteristicas fisicas
         new_window = tk.Toplevel(root)
         new_window.title("RTmid, Freq Critica y Modos")
         
@@ -144,8 +161,8 @@ class Application(tk.Frame):
         densidad_modal.pack()
     
     
-    ## -------------------------------------- Tabla ------------------------------
-        # Crear una nueva ventana
+    ## -------------------------------------- Tabla de eigenmodos ------------------------------
+        # Crear una nueva ventana para mostrar la lista de eigenmodos
         new_window2 = tk.Toplevel(root)
         new_window2.title("Lista de eigenmodes")
         
@@ -170,6 +187,7 @@ class Application(tk.Frame):
         
         tree.pack()
 
+    ## -------------------------------------- Grafica de barras eigenmodos ------------------------------
         # Crear una nueva ventana
         new_window3 = tk.Toplevel(root)
         new_window3.title("Gráfica")
